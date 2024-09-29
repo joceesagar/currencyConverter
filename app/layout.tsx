@@ -1,5 +1,9 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
+import '@radix-ui/themes/styles.css';
+import { Theme } from '@radix-ui/themes';
+
+
 import "./globals.css";
 
 const geistSans = localFont({
@@ -12,6 +16,8 @@ const geistMono = localFont({
   variable: "--font-geist-mono",
   weight: "100 900",
 });
+
+
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -28,7 +34,9 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
+        <Theme>
         {children}
+        </Theme>
       </body>
     </html>
   );
