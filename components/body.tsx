@@ -38,8 +38,8 @@ function Body() {
           <div className='h2 converter'>CURRENCY CONVERTER</div>
           <div className='w-auto h-auto flex flex-col gap-10'>
             <div className='flex gap-40'>
-              <CustomDropDown label='USD' />
-              <CustomDropDown label='INR' />
+              <CustomDropDown/>
+              <CustomDropDown/>
             </div>
             <div >
               <div><p className='p1 ml-8'>AMOUNT</p></div>

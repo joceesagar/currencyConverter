@@ -1,49 +1,107 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react';
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
-import { ChevronDownIcon } from '@radix-ui/react-icons'
-import Image from 'next/image';
+} from '@/components/ui/dropdown-menu';
+import { ChevronDownIcon } from '@radix-ui/react-icons';
+import { ScrollArea } from "@/components/ui/scroll-area"
+import axios from 'axios';
 
-interface CustomDropDownProps {
-  label: string;
+
+// Define interfaces for the API response
+interface CurrencyRates {
+  [key: string]: number; // Example: "USD": 1.23396, "EUR": 1, "GBP": 0.882047
 }
 
+interface ExchangeRatesApiResponse {
+  success: boolean;
+  timestamp: number;
+  base: string;
+  date: string;
+  rates: CurrencyRates;
+}
 
-function CustomDropDown({ label }: CustomDropDownProps) {
-  
+const CustomDropDown = () => {
+  const [data, setData] = useState<ExchangeRatesApiResponse | null>(null);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [error, setError] = useState<string | null>(null);
+  const [currency, setCurrency] = useState<string>("USD")
+
+  useEffect(() => {
+    const fetchCurrencyData = async () => {
+      try {
+        const response = await axios.get<ExchangeRatesApiResponse>(
+          'https://api.exchangeratesapi.io/v1/latest',
+          {
+            params: {
+              access_key: process.env.NEXT_PUBLIC_CURRENCY_API_KEY, // Use the API key from .env.local
+            },
+          }
+        );
+        setData(response.data); // Set the rates to the state directly
+      } 
+      catch (error: unknown) {
+        if (axios.isAxiosError(error)) {
+          setError(error.response?.data?.message || error.message);
+        } else if (error instanceof Error) {
+          setError(error.message);
+        } else {
+          setError('An unknown error occurred');
+        }
+      } 
+      finally {
+        setLoading(false);
+      }
+    };
+
+    // Call the function to fetch data
+    fetchCurrencyData();
+  }, []);
+
   return (
-    <div className='flex flex-col gap-1'>
+    <div className="flex flex-col gap-1">
       <div>
-        <p className='p1 ml-[55px]'>FROM</p>
+        <p className="p1 ml-[55px]">FROM</p>
       </div>
       <div>
         <DropdownMenu>
-          <DropdownMenuTrigger className='dropdown flex gap-1 group'>
-            <div className='h-auto w-auto h2 dropdown1'>
-            <img src="https://flagsapi.com/US/shiny/64.png"></img>
-              {label}
-              </div>
-            <div className='h-auto w-auto  mt-1  group-hover:translate-x-1 dropdown-hover:translate-x-1 transition-all'><ChevronDownIcon width={30} height={30} /></div>
+          <DropdownMenuTrigger className="dropdown flex gap-1 group">
+            <div className="h-auto w-auto h2 dropdown1">
+              <img src={`https://flagsapi.com/${currency.slice(0,2)}/shiny/64.png`} 
+              alt={`${currency}flag`} />
+              {currency}
+            </div>
+            <div className="h-auto w-auto mt-1 group-hover:translate-x-1 dropdown-hover:translate-x-1 transition-all">
+              <ChevronDownIcon width={30} height={30} />
+            </div>
           </DropdownMenuTrigger>
+
           <DropdownMenuContent>
-            <DropdownMenuItem>Profile</DropdownMenuItem>
+          <ScrollArea className="h-[200px]">
+            {/* Handle loading and error states */}
+            {loading && <DropdownMenuItem>Loading...</DropdownMenuItem>}
+            {error && <DropdownMenuItem>{error}</DropdownMenuItem>}
+
+            {/* Map through currency rates if data exists */}
+            {data &&
+              Object.entries(data.rates).map(([currency, rate]) => (
+                <DropdownMenuItem key={currency}>
+                  {currency} <img src={`https://flagsapi.com/${currency.slice(0,2)}/shiny/64.png`} 
+                  alt={`${currency}flag`} 
+                  onClick={()=>setCurrency(currency)}
+                  />
+                </DropdownMenuItem>
+              ))}
+              </ScrollArea>
             <DropdownMenuSeparator />
-            <DropdownMenuItem>Billing</DropdownMenuItem>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem>Team</DropdownMenuItem>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem>Subscription</DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default CustomDropDown
+export default CustomDropDown;
