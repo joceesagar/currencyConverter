@@ -18,6 +18,7 @@ function Body() {
   const [fromCurrencyRate, setFromCurrencyRate] = useState<number>(92.728091)
   const [toCurrency, setToCurrency] = useState<string>("USD")
   const [toCurrencyRate, setToCurrencyRate] = useState<number>(1.10449)
+  
 
   useEffect(() => {
     // Set a timeout to change the state after 3 ms
