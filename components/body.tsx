@@ -1,5 +1,5 @@
 
-import React, { useEffect } from 'react'
+import React, { FormEventHandler, ReactNode, useEffect } from 'react'
 
 import { useState } from "react";
 import { motion, Variants } from "framer-motion";
@@ -18,7 +18,9 @@ function Body() {
   const [fromCurrencyRate, setFromCurrencyRate] = useState<number>(92.728091)
   const [toCurrency, setToCurrency] = useState<string>("USD")
   const [toCurrencyRate, setToCurrencyRate] = useState<number>(1.10449)
-  
+  const [amount, setAmount] = useState<string | number>("")
+  const [result, setResult] = useState<number | null>(null)
+
 
   useEffect(() => {
     // Set a timeout to change the state after 3 ms
@@ -30,10 +32,26 @@ function Body() {
     return () => clearTimeout(timer);
   }, []);
 
-  console.log("From:",fromCurrency)
-  console.log("FromRate:",fromCurrencyRate)
-  console.log("To:",toCurrency)
-  console.log("toRate:",toCurrencyRate)
+  console.log("From:", fromCurrency)
+  console.log("FromRate:", fromCurrencyRate)
+  console.log("To:", toCurrency)
+  console.log("toRate:", toCurrencyRate)
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value
+    setAmount(value ? Number(value) : "")
+  }
+
+  const handleConvert = () => {
+    const numericAmount = typeof amount === 'string' ? Number(amount) : amount;
+    if (!isNaN(numericAmount) && !isNaN(fromCurrencyRate) && !isNaN(toCurrencyRate)) {
+      const finalResult = (toCurrencyRate / fromCurrencyRate) * numericAmount;
+      const fixedResult = parseFloat(finalResult.toFixed(4))
+      setResult(fixedResult); // Store the result
+    } else {
+      console.error("Invalid input values");
+    }
+  }
 
   return (
     <section className='h-full w-full flex justify-center items-center absolute inset-0'>
@@ -49,36 +67,44 @@ function Body() {
           <div className='h2 converter'>CURRENCY CONVERTER</div>
           <div className='w-auto h-auto flex flex-col gap-10'>
             <div className='flex gap-40'>
-              <CustomDropDown 
-              label='FROM' 
-              selectedCurrency={fromCurrency}
-              onCurrencySelect={
-                (currency,rate)=>
-                  {setFromCurrency(currency)
-                  setFromCurrencyRate(rate)}
-              }
+              <CustomDropDown
+                label='FROM'
+                selectedCurrency={fromCurrency}
+                onCurrencySelect={
+                  (currency, rate) => {
+                    setFromCurrency(currency)
+                    setFromCurrencyRate(rate)
+                  }
+                }
               />
-              <CustomDropDown 
-              label='TO' 
-              selectedCurrency={toCurrency}
-              onCurrencySelect={
-                (currency,rate)=>
-                  {setToCurrency(currency)
+              <CustomDropDown
+                label='TO'
+                selectedCurrency={toCurrency}
+                onCurrencySelect={
+                  (currency, rate) => {
+                    setToCurrency(currency)
                     setToCurrencyRate(rate)
                   }
-              }
+                }
               />
             </div>
             <div className='flex flex-col justify-center items-center'>
               <div><p className='p1'>AMOUNT</p></div>
-              <Input placeholder='Eg:2500'/>
+              <Input placeholder='Eg:2500'
+                value={amount}
+                onChange={handleInputChange}
+              />
             </div>
           </div>
           <div className=' bg-black w-full h-auto mt-3 flex justify-center items-center'>
-            <Button variant="outline">Button</Button>
+            <Button variant="outline"
+            onClick={handleConvert}
+            >
+              Button
+            </Button>
           </div>
           <div>
-            <p className='p1'>The Result is</p>
+            <p className='p1'>The Result is {result}</p>
           </div>
         </motion.div>
       }

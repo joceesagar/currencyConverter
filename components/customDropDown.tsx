@@ -35,36 +35,36 @@ const CustomDropDown = ({ label, selectedCurrency, onCurrencySelect }: CustomDro
   const [error, setError] = useState<string | null>(null);
  
 
-  // useEffect(() => {
-  //   const fetchCurrencyData = async () => {
-  //     try {
-  //       const response = await axios.get<ExchangeRatesApiResponse>(
-  //         'https://api.exchangeratesapi.io/v1/latest',
-  //         {
-  //           params: {
-  //             access_key: process.env.NEXT_PUBLIC_CURRENCY_API_KEY, // Use the API key from .env.local
-  //           },
-  //         }
-  //       );
-  //       setData(response.data); // Set the rates to the state directly
-  //     }
-  //     catch (error: unknown) {
-  //       if (axios.isAxiosError(error)) {
-  //         setError(error.response?.data?.message || error.message);
-  //       } else if (error instanceof Error) {
-  //         setError(error.message);
-  //       } else {
-  //         setError('An unknown error occurred');
-  //       }
-  //     }
-  //     finally {
-  //       setLoading(false);
-  //     }
-  //   };
+  useEffect(() => {
+    const fetchCurrencyData = async () => {
+      try {
+        const response = await axios.get<ExchangeRatesApiResponse>(
+          'https://api.exchangeratesapi.io/v1/latest',
+          {
+            params: {
+              access_key: process.env.NEXT_PUBLIC_CURRENCY_API_KEY, // Use the API key from .env.local
+            },
+          }
+        );
+        setData(response.data); // Set the rates to the state directly
+      }
+      catch (error: unknown) {
+        if (axios.isAxiosError(error)) {
+          setError(error.response?.data?.message || error.message);
+        } else if (error instanceof Error) {
+          setError(error.message);
+        } else {
+          setError('An unknown error occurred');
+        }
+      }
+      finally {
+        setLoading(false);
+      }
+    };
 
-  //   // Call the function to fetch data
-  //   fetchCurrencyData();
-  // }, []);
+    // Call the function to fetch data
+    fetchCurrencyData();
+  }, []);
 
   return (
     <div className="flex flex-col gap-1">
