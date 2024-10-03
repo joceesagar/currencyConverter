@@ -198,11 +198,12 @@ body {
   font-family: "Black Ops One", system-ui;
   font-weight: 400;
   font-style: normal;
-  font-size: 26px;
-  padding-left: 20px;
-  padding-right: 20px;
+  font-size: 32px;
+  padding-left: 15px;
+  padding-right: 15px;
   padding-top: 10px;
   padding-bottom: 10px;
+  width: auto;
 }
 
 
