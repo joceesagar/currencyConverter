@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 # Currency Converter
 
 This is a **Currency Converter** web application built using modern web technologies like **Next.js**, **TypeScript**, and **React**. The app fetches real-time currency conversion rates using **Axios** to handle API requests. Animations are powered by **Framer Motion**, and **Radix UI** is used for building accessible and customizable UI components.
