@@ -2,10 +2,11 @@
 import React, { FormEventHandler, ReactNode, useEffect } from 'react'
 
 import { useState } from "react";
-import { motion, Variants } from "framer-motion";
+import { motion} from "framer-motion";
 import CustomDropDown from './customDropDown';
 import { Input } from "@/components/ui/input"
 import { Button } from './ui/button';
+import { ArrowRightIcon} from '@radix-ui/react-icons';
 
 
 
@@ -96,16 +97,27 @@ function Body() {
               />
             </div>
           </div>
-          <div className=' bg-black w-full h-auto mt-3 flex justify-center items-center'>
+          <div className='w-full h-auto mt-3 flex justify-center items-center'>
             <Button variant="outline"
             onClick={handleConvert}
+            className='group flex gap-2'
             >
-              Button
+              <div>Convert</div>
+              <div className="h-auto w-auto group-hover:translate-x-1 group-hover:translate-y-[-1px] group-hover:rotate-[-45deg]  dropdown-hover:translate-x-1 transition-all">
+                <ArrowRightIcon width={30} height={30} />
+              </div>
             </Button>
           </div>
-          <div>
-            <p className='p1'>The Result is {result}</p>
-          </div>
+          {result && <motion.div
+          initial={{ opacity: 0, y: -10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{
+            duration: 1,
+            ease: [0.68, -0.55, 0.27, 1.55],
+          }}
+          >
+            <p className='p2'>{amount}{fromCurrency} = {result}{toCurrency}</p>
+          </motion.div>}
         </motion.div>
       }
 

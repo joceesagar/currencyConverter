@@ -7,7 +7,7 @@ const Cover: React.FC = () => {
   const [cover, setCover] = useState(true)
 
   return (
-    <section className='h-full w-full flex justify-center items-center relative'>
+    <section className='h-full w-full flex justify-center items-center relative overflow-hidden'>
       <AnimatePresence>
         {cover && (
           <>
