@@ -27,7 +27,7 @@ function Body() {
     // Set a timeout to change the state after 3 ms
     const timer = setTimeout(() => {
       setIsReady(true); // Set isReady to true after 3 ms
-    }, 4500); // 3 ms delay
+    }, 3500); // 3 ms delay
 
     // Cleanup function to clear the timer
     return () => clearTimeout(timer);

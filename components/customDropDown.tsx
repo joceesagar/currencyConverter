@@ -42,7 +42,7 @@ const CustomDropDown = ({ label, selectedCurrency, onCurrencySelect }: CustomDro
           'https://api.exchangeratesapi.io/v1/latest',
           {
             params: {
-              access_key: process.env.CURRENCY_API_KEY, // Use the API key from .env.local
+              access_key: process.env.NEXT_PUBLIC_CURRENCY_API_KEY, // Use the API key from .env.local
             },
           }
         );
