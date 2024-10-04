@@ -3,12 +3,12 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { ChevronDownIcon } from '@radix-ui/react-icons';
 import { ScrollArea } from "@/components/ui/scroll-area"
 import axios from 'axios';
+import Image from 'next/image';
 
 interface CustomDropDownProps {
   label: string;
@@ -75,8 +75,11 @@ const CustomDropDown = ({ label, selectedCurrency, onCurrencySelect }: CustomDro
         <DropdownMenu>
           <DropdownMenuTrigger className="dropdown flex gap-2 group mt-2">
             <div>
-              <img src={`https://flagsapi.com/${selectedCurrency.slice(0, 2)}/shiny/64.png`}
-                alt={`${selectedCurrency}flag`} />
+              <Image src={`https://flagsapi.com/${selectedCurrency.slice(0, 2)}/shiny/64.png`}
+                alt={`${selectedCurrency}flag`}
+                width={60}
+                height={60}
+                />
 
             </div>
             <div className='flex mt-3'>
@@ -99,9 +102,11 @@ const CustomDropDown = ({ label, selectedCurrency, onCurrencySelect }: CustomDro
               {data &&
                 Object.entries(data.rates).map(([currency, rate]) => (
                   <DropdownMenuItem key={currency}>
-                    {currency} <img src={`https://flagsapi.com/${currency.slice(0, 2)}/shiny/64.png`}
+                    {currency} <Image src={`https://flagsapi.com/${currency.slice(0, 2)}/shiny/64.png`}
                       alt={`${currency}flag`}
                       onClick={() => onCurrencySelect(currency,rate)}
+                      width={60}
+                      height={60}
                     />
                   </DropdownMenuItem>
                 ))}
